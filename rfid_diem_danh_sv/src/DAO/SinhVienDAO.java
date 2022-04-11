@@ -25,7 +25,7 @@ public class SinhVienDAO {
     
     public List<SinhVien> GetAll()
     {
-        connDB = new ConnectDB("rfid", "root", "");
+        connDB = new ConnectDB("rfid_nhom_39", "root", "");
         Connection conn = connDB.getConnection();
         String query = "select * from sinhvien";
         List<SinhVien> listSV = new ArrayList<SinhVien>();
