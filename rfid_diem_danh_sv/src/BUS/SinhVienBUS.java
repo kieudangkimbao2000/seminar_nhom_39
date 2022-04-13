@@ -26,7 +26,7 @@ public class SinhVienBUS {
         svDAO = new SinhVienDAO();
         List<SinhVien> listSV =  svDAO.GetAll();
         listSV.forEach(sv -> {
-            System.out.println(sv.getNgSinh());
+            System.out.println(sv.getMaSV());
         });
     }
 }

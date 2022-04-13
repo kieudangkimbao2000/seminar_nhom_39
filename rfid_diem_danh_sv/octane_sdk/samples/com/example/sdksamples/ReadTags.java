@@ -44,7 +44,7 @@ public class ReadTags {
             antennas.getAntenna((short) 1).setRxSensitivityinDbm(-70);
 
             reader.setTagReportListener(new TagReportListenerImplementation());
-
+            
             System.out.println("Applying Settings");
             reader.applySettings(settings);
 
