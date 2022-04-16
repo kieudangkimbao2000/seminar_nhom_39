@@ -2,49 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package GUI;
-
-import BUS.DiemDanhBUS;
-import com.example.sdksamples.SampleProperties;
-import com.example.sdksamples.TagReportListenerImplementation;
-import com.impinj.octane.AntennaConfigGroup;
-import com.impinj.octane.ImpinjReader;
-import com.impinj.octane.OctaneSdkException;
-import com.impinj.octane.ReaderMode;
-import com.impinj.octane.ReportConfig;
-import com.impinj.octane.ReportMode;
-import com.impinj.octane.Settings;
-import com.impinj.octane.Tag;
-import com.impinj.octane.TagReport;
-import com.impinj.octane.TagReportListener;
-import java.awt.FlowLayout;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Scanner;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 /**
  *
  * @author kieud
  */
-public class Main extends javax.swing.JFrame {
-    public static JFrame frame = new JFrame("RFID");
-    public static NhapGioGUI ng = new NhapGioGUI();
-    public static DiemDanhGUI dd = new DiemDanhGUI();
-    public static ImpinjReader reader = new ImpinjReader();
-    public static DiemDanhBUS ddBUS = new DiemDanhBUS();
-    
-    
+public class TableExample extends javax.swing.JFrame {
+
     /**
-     * Creates new form Main
+     * Creates new form TableExample
      */
-    public Main() {
+    public TableExample() {
         initComponents();
     }
 
@@ -90,25 +58,20 @@ public class Main extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TableExample.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TableExample.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TableExample.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TableExample.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(500, 300);
-                frame.setLocationRelativeTo(null);
-                
-                frame.add(ng);
-                frame.setVisible(true);
+                new TableExample().setVisible(true);
             }
         });
     }

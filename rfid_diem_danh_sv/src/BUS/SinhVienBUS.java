@@ -13,20 +13,33 @@ import java.util.List;
  * @author kieud
  */
 public class SinhVienBUS {
-    static SinhVienDAO svDAO;
+    static SinhVienDAO svDAO = new SinhVienDAO();
     
     public List<SinhVien> GetAll()
     {
-        svDAO = new SinhVienDAO();
         return svDAO.GetAll();
+    }
+    
+    public SinhVien GetByID(String id)
+    {
+        return svDAO.GetByID(id);
+    }
+    
+    public List<SinhVien> getSVNotInDD()
+    {
+        return svDAO.getSVNotInDD();
     }
     
     public static void main(String[] args)
     {
-        svDAO = new SinhVienDAO();
-        List<SinhVien> listSV =  svDAO.GetAll();
-        listSV.forEach(sv -> {
-            System.out.println(sv.getMaSV());
-        });
+//        svDAO = new SinhVienDAO();
+//        List<SinhVien> listSV =  svDAO.GetAll();
+//        listSV.forEach(sv -> {
+//            System.out.println(sv.getMaSV());
+//        });
+        
+        SinhVien sv = new SinhVienBUS().GetByID("SV1");
+        System.out.println(sv.getHoTen());
     }
+    
 }

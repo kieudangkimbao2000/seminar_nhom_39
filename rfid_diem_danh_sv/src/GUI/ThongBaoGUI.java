@@ -5,11 +5,20 @@
 package GUI;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.Box.Filler;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,15 +40,30 @@ public class ThongBaoGUI extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         
         JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2,1));
         panel.setBackground(Color.white);
-        panel.setLayout(new FlowLayout());
         
+        //layout row 1
         JLabel lbThongBao = new JLabel(thongBao);
-        Font font = new Font("Arial", Font.ITALIC, 16);
+        Font font = new Font("Arial", Font.PLAIN, 16);
         lbThongBao.setFont(font);
-        lbThongBao.setBorder(new EmptyBorder(30, 30, 30, 30));
+        lbThongBao.setBorder(new EmptyBorder(10, 10, 10, 10));
+        
+        //layout row 2
+        JPanel panel2 = new JPanel();
+        panel2.setBackground(Color.white);
+        JButton btn = new JButton("OK");
+        panel2.add(btn);
+        
+        btn.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
         
         panel.add(lbThongBao);
+        panel.add(panel2);
         
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent ev) {
@@ -79,5 +103,9 @@ public class ThongBaoGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
-
+    
+    public static void main(String[] args)
+    {
+        ThongBaoGUI thongBao = new ThongBaoGUI("Hello!");
+    }
 }

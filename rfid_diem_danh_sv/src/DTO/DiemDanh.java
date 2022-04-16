@@ -17,6 +17,19 @@ public class DiemDanh {
     private boolean VaoTre;
     private boolean VeSom;
 
+    public DiemDanh(String MaSV, LocalDateTime GioVao, LocalDateTime GioRa, boolean VaoTre, boolean VeSom) {
+        this.MaSV = MaSV;
+        this.GioVao = GioVao;
+        this.GioRa = GioRa;
+        this.VaoTre = VaoTre;
+        this.VeSom = VeSom;
+    }
+    
+    public DiemDanh(String MaSV)
+    {
+        this.MaSV = MaSV;
+    }
+
     public String getMaSV() {
         return MaSV;
     }

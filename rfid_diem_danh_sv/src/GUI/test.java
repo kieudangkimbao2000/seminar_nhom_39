@@ -4,8 +4,16 @@
  */
 package GUI;
 
+import BUS.DiemDanhBUS;
+import BUS.SinhVienBUS;
+import DTO.DiemDanh;
+import DTO.SinhVien;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
@@ -55,4 +63,24 @@ public class test extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
+
+    public static void main(String[] args) {
+//        List<SinhVien> lsSV = new SinhVienBUS().GetAll();
+//        List<DiemDanh> lsDD = new DiemDanhBUS().GetAll();
+//        
+//       lsDD.forEach(dd -> {
+//           System.out.println(dd.getGioRa());
+//       });
+//       LocalDateTime dateTime = null;
+//       lsSV.forEach(sv -> {
+//           System.out.println(sv.getMaSV());
+//       });
+
+       
+        LocalDateTime time =  LocalDateTime.now();
+        Timestamp time2 = Timestamp.valueOf(time);
+        LocalTime lt = time.toLocalTime();
+        System.out.println(lt);
+        System.out.println(time2.getNanos());
+    }
 }
