@@ -30,6 +30,12 @@ public class SinhVienBUS {
         return svDAO.getSVNotInDD();
     }
     
+    public boolean importExcel(String path)
+    {
+        path = path.replace("\\", "/");
+        return svDAO.importExcel(path);
+    }
+    
     public static void main(String[] args)
     {
 //        svDAO = new SinhVienDAO();

@@ -12,17 +12,37 @@ import java.time.LocalDateTime;
  */
 public class DiemDanh {
     private String MaSV;
+    private String MaLH;
     private LocalDateTime GioVao;
     private LocalDateTime GioRa;
     private boolean VaoTre;
     private boolean VeSom;
+    private boolean Vang;
 
-    public DiemDanh(String MaSV, LocalDateTime GioVao, LocalDateTime GioRa, boolean VaoTre, boolean VeSom) {
+    public DiemDanh(String MaSV, String MaLH, LocalDateTime GioVao, LocalDateTime GioRa, boolean VaoTre, boolean VeSom, boolean Vang) {
         this.MaSV = MaSV;
+        this.MaLH = MaLH;
         this.GioVao = GioVao;
         this.GioRa = GioRa;
         this.VaoTre = VaoTre;
         this.VeSom = VeSom;
+        this.Vang = Vang;
+    }
+
+    public String getMaLH() {
+        return MaLH;
+    }
+
+    public void setMaLH(String MaLH) {
+        this.MaLH = MaLH;
+    }
+    
+    public boolean isVang() {
+        return Vang;
+    }
+
+    public void setVang(boolean Vang) {
+        this.Vang = Vang;
     }
     
     public DiemDanh(String MaSV)

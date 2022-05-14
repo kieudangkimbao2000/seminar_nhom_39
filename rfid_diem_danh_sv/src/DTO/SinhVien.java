@@ -17,22 +17,19 @@ public class SinhVien {
     private LocalDate NgSinh;
     private String SDT;
     private String DChi;
-    private String Lop;
 
-    public SinhVien(String MaSV, String HoTen, String GT, LocalDate NgSinh, String SDT, String DChi, String Lop) {
+    public SinhVien(String MaSV, String HoTen, String GT, LocalDate NgSinh, String SDT, String DChi) {
         this.MaSV = MaSV;
         this.HoTen = HoTen;
         this.GT = GT;
         this.NgSinh = NgSinh;
         this.SDT = SDT;
         this.DChi = DChi;
-        this.Lop = Lop;
     }
 
-    public SinhVien(String MaSV, String HoTen, String Lop) {
+    public SinhVien(String MaSV, String HoTen) {
         this.MaSV = MaSV;
         this.HoTen = HoTen;
-        this.Lop = Lop;
     }
 
     public String getMaSV() {
@@ -82,14 +79,5 @@ public class SinhVien {
     public void setDChi(String DChi) {
         this.DChi = DChi;
     }
-
-    public String getLop() {
-        return Lop;
-    }
-
-    public void setLop(String Lop) {
-        this.Lop = Lop;
-    }
-    
     
 }

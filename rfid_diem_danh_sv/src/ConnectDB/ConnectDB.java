@@ -21,6 +21,10 @@ public class ConnectDB {
         this.Username = Username;
         this.Password = Password;       
     }
+
+    public ConnectDB() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
     public Connection getConnection(){
         Connection conn = null;
@@ -28,11 +32,10 @@ public class ConnectDB {
         {
 //            Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(this.DB_URL, this.Username, this.Password);
-            System.out.println("Ket noi database thanh cong");
         }
         catch(Exception e)
         {
-            System.out.println(e);
+            System.out.println("Kết nối database không thành công.");
         }
         return conn;
     }

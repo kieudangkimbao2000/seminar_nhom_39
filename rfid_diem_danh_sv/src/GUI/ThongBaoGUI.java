@@ -5,20 +5,13 @@
 package GUI;
 
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.Box.Filler;
-import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,11 +23,13 @@ import javax.swing.border.EmptyBorder;
  * @author kieud
  */
 public class ThongBaoGUI extends javax.swing.JFrame {
-
+    public static int MESSAGE=0;
+    public static int WARNING=1;
+    public static int ERROR=2;
     /**
      * Creates new form ThongBaoGUI
      */
-    public ThongBaoGUI(String thongBao) {
+    public ThongBaoGUI(String thongBao, int type) {
 //        initComponents();
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -45,6 +40,11 @@ public class ThongBaoGUI extends javax.swing.JFrame {
         
         //layout row 1
         JLabel lbThongBao = new JLabel(thongBao);
+        if(type == 1)
+        {
+            ImageIcon icon = new ImageIcon("./src/icons/warning_icon.jpg");
+            lbThongBao = new JLabel(thongBao, icon, JLabel.RIGHT);
+        }
         Font font = new Font("Arial", Font.PLAIN, 16);
         lbThongBao.setFont(font);
         lbThongBao.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -106,6 +106,6 @@ public class ThongBaoGUI extends javax.swing.JFrame {
     
     public static void main(String[] args)
     {
-        ThongBaoGUI thongBao = new ThongBaoGUI("Hello!");
+        
     }
 }

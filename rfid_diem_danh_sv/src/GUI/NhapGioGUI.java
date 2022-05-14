@@ -4,9 +4,10 @@
  */
 package GUI;
 
-import BUS.DiemDanhBUS;
-import com.example.sdksamples.SampleProperties;
-import com.example.sdksamples.TagReportListenerImplementation;
+import BUS.BoTriBUS;
+import BUS.LopHocBUS;
+import DTO.LopHoc;
+//import com.example.sdksamples.SampleProperties;
 import com.github.lgooddatepicker.components.DatePicker;
 import com.github.lgooddatepicker.components.TimePicker;
 import com.impinj.octane.AntennaConfigGroup;
@@ -21,6 +22,8 @@ import com.impinj.octane.TagReport;
 import com.impinj.octane.TagReportListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -29,25 +32,37 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Timestamp;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 /**
  *
  * @author kieud
  */
 public class NhapGioGUI extends javax.swing.JPanel {
-//    public static DiemDanhBUS ddBUS = new DiemDanhBUS();
+    public JComboBox cbLH;
+    public JTextField tfGioVao;
+    public JTextField tfGioRa;
+    
+    public String MaPH;
+    public int tgVT;
+    public int tgVS;
+    
     /**
      * Creates new form NhapGioGUI
      */
@@ -61,6 +76,7 @@ public class NhapGioGUI extends javax.swing.JPanel {
         
         //tao layout cho north
         JPanel panelN = new JPanel();
+        panelN.setBorder(new EmptyBorder(20, 0, 20, 0));
         panelN.setBackground(Color.BLACK);
         
         GridBagLayout gbLayoutN = new GridBagLayout();
@@ -68,12 +84,12 @@ public class NhapGioGUI extends javax.swing.JPanel {
         
         JLabel lbTieuDe1 = new JLabel("RFID");
         lbTieuDe1.setHorizontalAlignment(JLabel.CENTER);
-        lbTieuDe1.setFont(new Font("Verdana", Font.PLAIN, 30));
+        lbTieuDe1.setFont(new Font("Verdana", Font.BOLD, 30));
         lbTieuDe1.setForeground(new Color(255,222,76));
         
         JLabel lbTieuDe2 = new JLabel("Điểm danh sinh viên");
         lbTieuDe2.setHorizontalAlignment(JLabel.CENTER);
-        lbTieuDe2.setFont(new Font("Verdana", Font.PLAIN, 20));
+        lbTieuDe2.setFont(new Font("Verdana", Font.BOLD, 20));
         lbTieuDe2.setForeground(new Color(255,222,76));
         
         GridBagConstraints gbcN = new GridBagConstraints();
@@ -93,6 +109,7 @@ public class NhapGioGUI extends javax.swing.JPanel {
         panelC.setLayout(gbLayoutC);
         
         JLabel lbNgay = new JLabel("Ngày");
+        JLabel lbLH = new JLabel("Lớp học");
         JLabel lbGioVao = new JLabel("Giờ vào");
         JLabel lbGioRa = new JLabel("Giờ ra");
         
@@ -107,11 +124,34 @@ public class NhapGioGUI extends javax.swing.JPanel {
         lbWarGioRa.setVisible(false);
         
         DatePicker dpNgay = new DatePicker();
+        dpNgay.getComponent(1).setBackground(Color.white);
         dpNgay.setDate(LocalDate.now());
         dpNgay.setEnabled(false);
         
-        TimePicker tpGioVao = new TimePicker();
-        TimePicker tpGioRa = new TimePicker();
+        BoTriBUS btBUS = new BoTriBUS();
+        
+        Properties prop = readFileCauHinh();
+        MaPH = prop.getProperty("MaPH").toString();
+        tgVT = Integer.valueOf(prop.getProperty("VT").toString());
+        tgVS = Integer.valueOf(prop.getProperty("VS").toString());
+        String[] arrayLH = btBUS.getListByPHandNgay(MaPH)
+                .stream()
+                .map(bt -> bt.getMaLH())
+                .toArray(String[]::new);
+        cbLH = new  JComboBox(arrayLH);
+        cbLH.setBackground(Color.white);
+        
+        tfGioVao = new JTextField();
+        tfGioVao.setEditable(false);
+        tfGioRa = new JTextField();
+        tfGioRa.setEditable(false);
+        
+        if(cbLH.getItemCount() > 0)
+        {
+            LopHoc lh = new LopHocBUS().getLHByRoomandID(MaPH, cbLH.getSelectedItem().toString());
+            tfGioVao.setText(lh.getGioVao().toString());
+            tfGioRa.setText(lh.getGioRa().toString());
+        }
         
         GridBagConstraints gbcC = new GridBagConstraints();
         gbcC.fill = GridBagConstraints.HORIZONTAL;
@@ -127,71 +167,78 @@ public class NhapGioGUI extends javax.swing.JPanel {
         panelC.add(dpNgay, gbcC);
         gbcC.gridx = 0;
         gbcC.gridy += 1;
+        panelC.add(lbLH, gbcC);
+        gbcC.gridx += 1;
+        panelC.add(cbLH, gbcC);
+        gbcC.gridx = 0;
+        gbcC.gridy += 1;
         panelC.add(lbGioVao, gbcC);
         gbcC.gridx += 1;
-        panelC.add(tpGioVao, gbcC);
+        panelC.add(tfGioVao, gbcC);
         gbcC.gridx += 1;
         panelC.add(lbWarGioVao, gbcC);
         gbcC.gridx = 0;
         gbcC.gridy += 1;
         panelC.add(lbGioRa, gbcC);
         gbcC.gridx += 1;
-        panelC.add(tpGioRa, gbcC);
+        panelC.add(tfGioRa, gbcC);
         gbcC.gridx += 1;
         panelC.add(lbWarGioRa, gbcC);
         
         //tao layout cho south
         JPanel panelS = new  JPanel();
-        panelS.setBackground(Color.WHITE);
+        panelS.setBackground(Color.white);
         
         FlowLayout fLayoutS = new FlowLayout();
         panelS.setLayout(fLayoutS);
         
-        JButton bHuy = new JButton("Hủy");
         JButton bTiepTuc = new JButton("Tiếp tục");
+        bTiepTuc.setBackground(Color.white);
         
-        panelS.add(bHuy);
-        panelS.add(Box.createRigidArea(new Dimension(20, 0)));
         panelS.add(bTiepTuc);
         
         //xu ly event
-        bHuy.addActionListener(new ActionListener(){
+        cbLH.addItemListener(new ItemListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                tpGioVao.setText("");
-                tpGioRa.setText("");
+            public void itemStateChanged(ItemEvent e) {
+                if(cbLH.getItemCount() > 0)
+                {
+                    LopHoc lh = new LopHocBUS().getLHByRoomandID(MaPH, cbLH.getSelectedItem().toString());
+                    tfGioVao.setText(lh.getGioVao().toString());
+                    tfGioRa.setText(lh.getGioRa().toString());
+                }
             }
-            
         });
         
         bTiepTuc.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(tpGioVao.getText().equals(null) || tpGioVao.getText().equals("")){
-                    lbWarGioVao.setVisible(true);
-                }
-                if(tpGioRa.getText().equals(null) || tpGioRa.getText().equals(""))
-                {
-                    lbWarGioRa.setVisible(true);
-                }
-                if (!(tpGioVao.getText().equals(null) || tpGioVao.getText().equals("")) &&
-                        !(tpGioRa.getText().equals(null) || tpGioRa.getText().equals(""))){
-                    if(tpGioVao.getTime().compareTo(tpGioRa.getTime()) < 0){
-                        Main.ddBUS.gioVao = tpGioVao.getTime();
-                        Main.ddBUS.gioRa = tpGioRa.getTime();
-                        
-                        System.out.println("NhapGioGUI: " );
-                        settingReader();
-                        
-                        Main.frame.remove(Main.ng);
-                        Main.frame.add(Main.dd);
-                        Main.frame.pack();
-                        Main.frame.setLocationRelativeTo(null);
-                        Main.frame.update(Main.frame.getGraphics());
-                    } else {
-                        String thongBao = "Giờ vào phải trước giờ ra!";
-                        ThongBaoGUI tbGUI = new ThongBaoGUI(thongBao);
-                    }
+                if (cbLH.getItemCount() > 0){
+                    Main.menu.getItem(0).setEnabled(false);
+                    LopHoc lh = new LopHocBUS().getLHByRoomandID(MaPH, cbLH.getSelectedItem().toString());
+                    Main.ddBUS.gioVao = lh.getGioVao();
+                    Main.ddBUS.gioRa = lh.getGioRa();
+                    Main.ddBUS.MaLH = cbLH.getSelectedItem().toString();
+                    Main.ddBUS.tgVT = tgVT;
+                    Main.ddBUS.tgVS = tgVS;
+                    Main.dd.MaLH = cbLH.getSelectedItem().toString();
+                    Main.ddBUS.listDD = Main.ddBUS.GetAllDDonDate();
+                    
+                    settingReader();
+                    
+                    Main.frame.remove(Main.ng);
+                    Main.dd.setPanelN();
+                    
+                    Main.dd.renewTable();
+                    Main.dd.lbSS.setText("Sỉ số: " + Main.dd.lsH.size());
+                    
+                    Main.frame.add(Main.dd);
+                    Main.frame.pack();
+                    Main.frame.setLocationRelativeTo(null);
+                    Main.frame.update(Main.frame.getGraphics());
+                } else {
+                        String thongBao = "Chưa có lớp được chọn!";
+                        ThongBaoGUI tbGUI = new ThongBaoGUI(thongBao, ThongBaoGUI.WARNING);
                 }
             }
         
@@ -201,6 +248,35 @@ public class NhapGioGUI extends javax.swing.JPanel {
         add(panelN, BorderLayout.NORTH);
         add(panelS, BorderLayout.SOUTH);
         add(panelC, BorderLayout.CENTER);
+    }
+    
+    private void getComponents(Container c){
+        Component[] m = c.getComponents();
+
+        for(int i = 0; i < m.length; i++){
+
+            if(m[i].getClass().getName() == "javax.swing.JPanel")
+                m[i].setBackground(Color.white);
+
+            if(c.getClass().isInstance(m[i]))
+                getComponents((Container)m[i]);
+        }
+    }
+    
+    public Properties readFileCauHinh()
+    {
+        Properties prop = new Properties();
+        try {
+            FileInputStream fis = new FileInputStream("./cau_hinh.conf");
+            prop.load(fis);
+            fis.close();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return prop;
     }
 
     /**
@@ -230,12 +306,13 @@ public class NhapGioGUI extends javax.swing.JPanel {
 
     public static void settingReader(){
         try {
-            String hostname = System.getProperty(SampleProperties.hostname);
+//            String hostname = System.getProperty(SampleProperties.hostname);
+            String hostname = "169.254.96.13";
 
-            if (hostname == null) {
-                throw new Exception("Must specify the '"
-                        + SampleProperties.hostname + "' property");
-            }
+//            if (hostname == null) {
+//                throw new Exception("Must specify the '"
+//                        + SampleProperties.hostname + "' property");
+//            }
             System.out.println("Connecting");
             Main.reader.connect(hostname);
 
@@ -288,22 +365,13 @@ public class NhapGioGUI extends javax.swing.JPanel {
         @Override
         public void onTagReported(ImpinjReader reader, TagReport report) {
             List<Tag> tags = report.getTags();
-            
             for(Tag t : tags)
             {
                 String MaSV = t.getEpc().toString();
-                MaSV = MaSV.replace(" ", "");
-                
-                Main.ddBUS.insertDD(MaSV);
-  
-                Main.dd.panelSS.removeAll();
-                Main.dd.panelHD.removeAll();
-                
-                Main.dd.renewPanelSSandHD();
-                
-                Main.frame.pack();
-                Main.frame.setLocationRelativeTo(null);
-                Main.frame.update(Main.frame.getGraphics());
+                if(Main.ddBUS.insertDD(MaSV))
+                {
+                    Main.dd.renewTable();
+                }
             }
         }
         

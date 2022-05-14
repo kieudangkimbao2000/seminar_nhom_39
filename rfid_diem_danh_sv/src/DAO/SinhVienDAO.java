@@ -10,11 +10,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,9 +35,10 @@ public class SinhVienDAO {
             while(rs.next())
             {
                 SinhVien sv = new SinhVien(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4).toLocalDate(),
-                        rs.getString(5), rs.getString(6), rs.getString(7));
+                        rs.getString(5), rs.getString(6));
                 listSV.add(sv);
             }
+            stat.close();
             conn.close();
         } catch(SQLException e)
         {
@@ -64,13 +62,13 @@ public class SinhVienDAO {
             while(rs.next())
             {
                 sv = new SinhVien(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4).toLocalDate(),
-                        rs.getString(5), rs.getString(6), rs.getString(7));
+                        rs.getString(5), rs.getString(6));
             }
+            stat.close();
             conn.close();
         } catch(Exception ex)
         {
-            System.out.println("Không lấy được dữ liệu diemdanh.");
-            System.out.println(ex);
+            System.out.println("Không lấy được dữ liệu sinh viên." +ex);
         }
         
         return sv;
@@ -110,9 +108,10 @@ public class SinhVienDAO {
             while(rs.next())
             {
                 SinhVien sv = new SinhVien(rs.getString(1), rs.getString(2), rs.getString(3), rs.getDate(4).toLocalDate(),
-                        rs.getString(5), rs.getString(6), rs.getString(7));
+                        rs.getString(5), rs.getString(6));
                 listSV.add(sv);
             }
+            stat.close();
             conn.close();
         } catch(SQLException e)
         {
@@ -120,6 +119,32 @@ public class SinhVienDAO {
         }
         
         return listSV;
+    }
+    
+    public boolean importExcel(String path)
+    {
+        connDB = new ConnectDB("rfid_nhom_39", "root", "");
+        Connection conn = connDB.getConnection();
+        
+        System.out.println(path);
+        String query = "LOAD DATA INFILE '"+ path +"' INTO TABLE hoc ";
+        query += "FIELDS TERMINATED BY ',' ";
+        query += "LINES TERMINATED BY '\r\n' ";
+        query += "IGNORE 1 LINES ";
+        query += "(MaSV, MaLH);";
+        
+        try
+        {
+            Statement stat = conn.createStatement();
+            stat.executeUpdate(query);
+            stat.close();
+            conn.close();
+        } catch(SQLException ex)
+        {
+            System.out.println("Không import được danh sách sinh viên." + ex);
+            return false;
+        }
+        return true;
     }
     
     public static void main(String[] args) {
